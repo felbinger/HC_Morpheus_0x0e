@@ -69,6 +69,21 @@ for y in range(img.size[0]):
 img.save("output_qr.png")
 ```
 
+**Alternative Lösung von @MaxiHuhe04**
+```python
+from PIL import Image, ImageDraw
+
+data = open("input_binary_or_not.txt").read()
+size = int(len(data) ** 0.5)
+im = Image.new("1", (size, size))
+draw = ImageDraw.Draw(im)
+
+for i, b in enumerate(data):
+        draw.point((i % size, i // size), not int(b))
+
+im.show()
+```
+
 Anschließend kann man den QR Code in der Datei `output_qr.png` scannen und enthält die Ausgabe:
 ```
 a336f671080fbf4f2a230f313560ddf0d0c12dfcf1741e49e8722a234673037dc493caa8d291d8025f71089d63cea809cc8ae53e5b17054806837dbe4099c4ca=sha512(text)
